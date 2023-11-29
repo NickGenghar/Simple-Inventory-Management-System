@@ -1,5 +1,8 @@
+use chrono::{Local, DateTime};
+use chrono::offset::{TimeZone, LocalResult};
+
 pub struct History {
-    time: chrono::DateTime<chrono::Local>,
+    time: DateTime<Local>,
     who: String,
     reason: String,
     amount: i16
@@ -10,10 +13,20 @@ impl History {
         History {
             who,
             reason,
-            time: chrono::Local::now(),
+            time: Local::now(),
             amount
         }
     }
+
+    pub fn rebuild(who: String, reason: String, t: i64, amount: i16) -> History {
+        let time = Local::timestamp_opt(&Local, t, 0).unwrap();
+            History {
+                who,
+                reason,
+                time,
+                amount
+            }
+        }
 
     fn time_unix(&self) -> i64 {
         return self.time.timestamp();
